@@ -7,9 +7,10 @@ This repository has three parts:
 
 | | What | Where |
 |---|---|---|
-| 1 | **Bring-up test firmware** — flashes to a fresh board and checks every peripheral, then advertises for wireless (BLE) updates | [`hejia_hwtest/`](hejia_hwtest/) |
-| 2 | **Prebuilt images** — ready to flash, no toolchain needed | [`prebuilt/`](prebuilt/) |
-| 3 | **Android bench app** — reads all telemetry over Bluetooth, pushes firmware over BLE, WiFi latency test, buzzer + mic tools | download below |
+| 1 | **Hardware reference** — pin map, component list (camera, mic, speaker/amp, sensors), and the design notes behind them | [`HARDWARE.md`](HARDWARE.md) |
+| 2 | **Bring-up test firmware** — flashes to a fresh board and checks every peripheral, then advertises for wireless (BLE) updates | [`hejia_hwtest/`](hejia_hwtest/) |
+| 3 | **Prebuilt images** — ready to flash, no toolchain needed | [`prebuilt/`](prebuilt/) |
+| 4 | **Android bench app** — reads all telemetry over Bluetooth, pushes firmware over BLE, WiFi latency test, buzzer + mic tools | [`app/`](app/) + below |
 
 ---
 
@@ -20,11 +21,16 @@ characteristic (full telemetry), pushes firmware over BLE, runs a WiFi telemetry
 check, plays the buzzer chimes/tones, and measures the real acoustic output with the phone
 mic (FFT + live spectrum).
 
-**Download (APK):**
-https://github.com/AugeasTechnologies/stovyn-ota/releases/download/bench-v1.3.0/StovynBench-1.3.0.apk
+**Download:**
+- APK: [`app/StovynBench-1.3.0.apk`](app/StovynBench-1.3.0.apk)
+- ZIP (use this if your browser blocks the .apk): [`app/StovynBench-1.3.0.zip`](app/StovynBench-1.3.0.zip) — unzip to get the .apk
+- Or the release page: https://github.com/AugeasTechnologies/stovyn-ota/releases/tag/bench-v1.3.0
 
-On the phone: Settings → allow your browser to "Install unknown apps", open the link, install.
-The app self-updates after that (no need to re-download).
+Most browsers flag a direct .apk as unsafe ("can't be downloaded securely" / "this file may
+harm your device") — that is normal for any APK; choose **Keep** / **Download anyway**. If your
+browser won't allow it at all, download the **.zip** instead and unzip it. To install, allow your
+browser (or Files app) to "Install unknown apps" in Android Settings, then open the .apk. The app
+self-updates after that, so this is a one-time sideload.
 
 ---
 
