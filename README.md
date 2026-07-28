@@ -16,15 +16,24 @@ This repository has three parts:
 
 ## Android bench app (Stovyn Bench)
 
-A single-screen Android tool that connects to the board over Bluetooth and dumps every
-characteristic (full telemetry), pushes firmware over BLE, runs a WiFi telemetry + latency
-check, plays the buzzer chimes/tones, and measures the real acoustic output with the phone
-mic (FFT + live spectrum).
+An Android bring-up + diagnostics tool for the board. Two modes:
+
+- **Setup Wizard** — walks a tech through every hardware check in order, with a pass/fail for
+  each: Bluetooth connect, device info, BLE latency, WiFi join, WiFi latency + RSSI (enclosure
+  check), battery/fuel gauge, thermal (MLX90640, live), camera (OV5640, live), PIR motion,
+  microphone + whistle, speaker, and a record + playback of live telemetry — then a summary.
+- **Custom Tools** — every check as a standalone tool, plus a full telemetry dump, a live
+  **MLX90640 thermal RGB viewer**, an **OV5640 camera viewer** (capture/stream), a continuous
+  **microphone analyzer** (FFT spectrum + peak-frequency readout), and firmware OTA over BLE.
+
+The camera, thermal, PIR and raw-mic readouts need the board running the **product firmware**
+(the bring-up test firmware exposes only the peripheral self-test + BLE OTA). The camera and
+thermal viewers stream over WiFi, so run WiFi Setup first.
 
 **Download:**
-- APK: [`app/StovynBench-1.3.0.apk`](app/StovynBench-1.3.0.apk)
-- ZIP (use this if your browser blocks the .apk): [`app/StovynBench-1.3.0.zip`](app/StovynBench-1.3.0.zip) — unzip to get the .apk
-- Or the release page: https://github.com/AugeasTechnologies/stovyn-ota/releases/tag/bench-v1.3.0
+- APK: [`app/StovynBench-1.4.0.apk`](app/StovynBench-1.4.0.apk)
+- ZIP (use this if your browser blocks the .apk): [`app/StovynBench-1.4.0.zip`](app/StovynBench-1.4.0.zip) — unzip to get the .apk
+- Or the release page: https://github.com/AugeasTechnologies/stovyn-ota/releases/tag/bench-v1.4.0
 
 Most browsers flag a direct .apk as unsafe ("can't be downloaded securely" / "this file may
 harm your device") — that is normal for any APK; choose **Keep** / **Download anyway**. If your
