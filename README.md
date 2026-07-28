@@ -32,17 +32,17 @@ thermal viewers stream over WiFi, so run WiFi Setup first.
 
 **Download:**
 - **China (recommended in mainland China — jsDelivr mirror):**
-  https://cdn.jsdelivr.net/gh/AugeasTechnologies/stovyn-hejia@main/app/StovynBench-1.4.6.apk
-- APK (GitHub): [`app/StovynBench-1.4.6.apk`](app/StovynBench-1.4.6.apk)
-- ZIP (use this if your browser blocks the .apk): [`app/StovynBench-1.4.6.zip`](app/StovynBench-1.4.6.zip) — unzip to get the .apk
-- Or the release page: https://github.com/AugeasTechnologies/stovyn-ota/releases/tag/bench-v1.4.6
+  https://cdn.jsdelivr.net/gh/AugeasTechnologies/stovyn-hejia@main/app/StovynBench-1.4.7.apk
+- APK (GitHub): [`app/StovynBench-1.4.7.apk`](app/StovynBench-1.4.7.apk)
+- ZIP (use this if your browser blocks the .apk): [`app/StovynBench-1.4.7.zip`](app/StovynBench-1.4.7.zip) — unzip to get the .apk
+- Or the release page: https://github.com/AugeasTechnologies/stovyn-ota/releases/tag/bench-v1.4.7
 
 Most browsers flag a direct .apk as unsafe ("can't be downloaded securely" / "this file may
 harm your device") — that is normal for any APK; choose **Keep** / **Download anyway**. If your
 browser won't allow it at all, download the **.zip** instead and unzip it. To install, allow your
 browser (or Files app) to "Install unknown apps" in Android Settings, then open the .apk.
 
-The app **self-updates** after that (one-time sideload). From v1.4.6 the updater is China-aware:
+The app **self-updates** after that (one-time sideload). From v1.4.7 the updater is China-aware:
 it checks a jsDelivr mirror first (reachable in mainland China) and falls back to GitHub, so
 installed copies keep updating even where `raw.githubusercontent.com` and the GitHub release CDN
 are blocked.
