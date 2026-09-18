@@ -39,14 +39,20 @@ compiles against).
 | I2S speaker data (DOUT) | 3 | to amp DIN (this pin is the piezo on boards without the amp) |
 | I2S mic data (SD) | 46 | from the I2S MEMS mic; strapping pin |
 | UART bridge TX / RX | 43 / 44 | CH340/CP2102 for flashing + console |
+| **Camera rail enable** (TPS22917) | 36 | load switch, **active LOW = camera powered**; freed by quad PSRAM |
+| **Thermal rail enable** (TPS22917) | 37 | load switch, **active LOW = MLX90640 powered**; freed by quad PSRAM |
+| **BQ27441 GPOUT** | 35 | fuel-gauge status input; freed by quad PSRAM (not RTC-capable — poll over I2C) |
 
 ---
 
 ## 3. Components
 
 ### MCU
-- **ESP32-S3-WROOM-1-N16R8** — 16 MB flash, 8 MB PSRAM (PSRAM is required: camera framebuffers +
-  thermal streaming live in PSRAM).
+- **ESP32-S3-WROOM-1-N16R2** — 16 MB flash, **2 MB quad (QSPI) PSRAM**. Use the quad part, **NOT the
+  octal N16R8**: on the ESP32-S3, octal (OPI) PSRAM permanently occupies **GPIO 33–37**, which this
+  board rev needs for the camera/thermal power-switch enables (IO36/37) and the BQ27441 GPOUT (IO35).
+  Quad PSRAM frees 33–37. Same WROOM-1 footprint, so it is a drop-in part swap. 2 MB is ample here —
+  capture is a brief event JPEG (~180 KB), not continuous raw video. Build with `PSRAM=enabled` (QSPI).
 
 ### Sensor I2C bus (SDA 38 / SCL 4)
 - **MLX90640** — 32×24 far-IR thermal array (the primary fire/heat sensor), address `0x33`.

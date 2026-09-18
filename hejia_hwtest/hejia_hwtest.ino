@@ -39,7 +39,7 @@
 //   * Camera HREF=GPIO45 and PIR=GPIO46 are strapping pins.
 //
 // BUILD (Arduino/arduino-cli). OTA-capable partition scheme REQUIRED (two app slots):
-//   --fqbn esp32:esp32:esp32s3:FlashSize=16M,PSRAM=opi,PartitionScheme=app3M_fat9M_16MB,CDCOnBoot=default
+//   --fqbn esp32:esp32:esp32s3:FlashSize=16M,PSRAM=enabled,PartitionScheme=app3M_fat9M_16MB,CDCOnBoot=default
 // Optional parts (append; both default OFF): --build-property "compiler.cpp.extra_flags=-DUSE_I2S_SPEAKER=1 -DUSE_I2S_MIC=1"
 // (Verified: piezo 778 KB / speaker+mic 802 KB, both 25% of the 3 MB slot.)
 // ============================================================================
@@ -100,6 +100,20 @@
 #define P_SD_D1        17
 #define P_SD_D2        18
 #define P_SD_D3         8
+
+// ── Hejia rev (2026-09-17): sensor power rails + fuel-gauge GPOUT ─────────────
+//   IO36 / IO37 gate the OV5640 and MLX90640 supplies through TPS22917LDBVR load
+//   switches that are ENABLE-ON-LOW: drive LOW to turn the rail ON, HIGH to cut it.
+//   IO35 is the BQ27441DRZR-G1B GPOUT (battery-gauge interrupt / status) input.
+//   IMPORTANT: GPIO35-37 are the ESP32-S3 octal-PSRAM lines (SPIIO6/SPIIO7/DQS),
+//   so a board using these pins MUST run QUAD PSRAM — build with PSRAM=qspi, NOT
+//   opi. On an octal (N16R8/opi) module these pins belong to the PSRAM and neither
+//   the load switches nor the camera framebuffer would work.
+#define P_CAM_PWR_EN   36     // TPS22917 -> OV5640 rail, ACTIVE LOW
+#define P_MLX_PWR_EN   37     // TPS22917 -> MLX90640 rail, ACTIVE LOW
+#define P_BQ_GPOUT     35     // BQ27441DRZR-G1B GPOUT (input)
+#define PWR_ON        LOW     // TPS22917 enable is active-low
+#define PWR_OFF       HIGH
 
 // I2C addresses we expect on the sensor bus
 #define ADDR_MLX90640  0x33
@@ -186,6 +200,7 @@ struct Results {
   bool sd_mount=false;
   bool button_idle_high=false;
   int  pir_level=-1;
+  int  bq_gpout=-1;
   uint32_t cam_err=0, frame_bytes=0;
   uint64_t sd_total_mb=0;
 } R;
@@ -241,6 +256,16 @@ static void runHardwareTests() {
   Serial.println("\n==== Hejia board hardware bring-up test ====");
   led(40, 0, 40);   // purple = running
 
+  // 1. Sensor/camera power rails (Hejia rev). TPS22917 load switches are ACTIVE LOW:
+  //    pull IO36 (OV5640) and IO37 (MLX90640) LOW to turn the rails ON, then settle
+  //    before any SCCB/I2C probe below. IO35 = BQ27441 GPOUT (read-only status).
+  pinMode(P_CAM_PWR_EN, OUTPUT); digitalWrite(P_CAM_PWR_EN, PWR_ON);
+  pinMode(P_MLX_PWR_EN, OUTPUT); digitalWrite(P_MLX_PWR_EN, PWR_ON);
+  pinMode(P_BQ_GPOUT, INPUT);
+  delay(20);   // TPS22917 turn-on + rail settle before the sensors are addressed
+  R.bq_gpout = digitalRead(P_BQ_GPOUT);
+  Serial.printf("[TEST] power rails ON (cam IO36->LOW, mlx IO37->LOW); BQ27441 GPOUT(IO35)=%d\n", R.bq_gpout);
+
   // 2. Buzzer / speaker
 #if USE_I2S_SPEAKER
   hwtestSpeakerChime();
@@ -286,6 +311,7 @@ static void runHardwareTests() {
     if (fb) { R.cam_frame = true; R.frame_bytes = fb->len; esp_camera_fb_return(fb); }
     Serial.printf("[TEST] camera init OK, frame=%s (%u bytes)\n", R.cam_frame?"captured":"FAILED", (unsigned)R.frame_bytes);
     esp_camera_deinit();   // free the DVP pins/PSRAM before BLE
+    digitalWrite(P_CAM_PWR_EN, PWR_OFF);   // cut the OV5640 rail (TPS22917 off) once the frame is captured
   } else {
     Serial.printf("[TEST] camera init FAILED err=0x%x\n", (unsigned)e);
   }
@@ -311,6 +337,7 @@ static void runHardwareTests() {
   nvs.putUChar("mlx", R.i2c_mlx); nvs.putUChar("tmp", R.i2c_tmp); nvs.putUChar("bq", R.i2c_bq);
   nvs.putUChar("cam", R.cam_init && R.cam_frame); nvs.putUChar("sd", R.sd_mount);
   nvs.putUInt("camerr", R.cam_err); nvs.putUInt("frame", R.frame_bytes);
+  nvs.putInt("bqgpo", R.bq_gpout);
   nvs.end();
   led(allCore ? 0 : 60, allCore ? 60 : 0, 0);   // green / red
   feedbackTone(allCore ? 3200 : 1500, allCore ? 90 : 300);

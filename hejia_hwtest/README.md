@@ -1,7 +1,7 @@
 # Stovyn Board Bring-Up + BLE OTA — Hejia Guide
 
 One-page guide to flashing and updating the Stovyn main-product board
-(`hejia_hwtest` firmware). Target MCU: **ESP32-S3 (N16R8, 16 MB flash / 8 MB PSRAM)**.
+(`hejia_hwtest` firmware). Target MCU: **ESP32-S3-WROOM-1-N16R2 (16 MB flash / 2 MB quad PSRAM)**.
 
 ---
 
@@ -27,12 +27,12 @@ Install once: Arduino ESP32 core 3.x + `arduino-cli`.
 ```
 # from the repo root
 arduino-cli compile \
-  --fqbn esp32:esp32:esp32s3:FlashSize=16M,PSRAM=opi,PartitionScheme=app3M_fat9M_16MB,CDCOnBoot=default,USBMode=hwcdc,UploadSpeed=921600,CPUFreq=240 \
+  --fqbn esp32:esp32:esp32s3:FlashSize=16M,PSRAM=enabled,PartitionScheme=app3M_fat9M_16MB,CDCOnBoot=default,USBMode=hwcdc,UploadSpeed=921600,CPUFreq=240 \
   --output-dir ./build hejia_hwtest
 
 # upload: COMx = the CH340/CP2102 bridge port
 arduino-cli upload -p COMx \
-  --fqbn esp32:esp32:esp32s3:FlashSize=16M,PSRAM=opi,PartitionScheme=app3M_fat9M_16MB,CDCOnBoot=default \
+  --fqbn esp32:esp32:esp32s3:FlashSize=16M,PSRAM=enabled,PartitionScheme=app3M_fat9M_16MB,CDCOnBoot=default \
   --input-dir ./build hejia_hwtest
 ```
 

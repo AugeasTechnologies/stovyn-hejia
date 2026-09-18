@@ -1,7 +1,10 @@
 # Stovyn Board — Bring-Up & Diagnostics (Hejia)
 
 Everything needed to bring up, verify, and wirelessly update the Stovyn main-product
-board. Target MCU: **ESP32-S3-WROOM-1 (N16R8 — 16 MB flash / 8 MB PSRAM)**.
+board. Target MCU: **ESP32-S3-WROOM-1-N16R2 (16 MB flash / 2 MB quad PSRAM)**.
+Use the **quad-PSRAM** part (N16R2), **not** the octal N16R8 — the octal PSRAM occupies GPIO 33–37,
+which this board needs for the sensor power-switch / fuel-gauge signals (see HARDWARE.md). Same
+WROOM-1 footprint, so it is a drop-in part swap.
 
 This repository has three parts:
 
