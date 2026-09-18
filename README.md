@@ -32,10 +32,10 @@ thermal viewers stream over WiFi, so run WiFi Setup first.
 
 **Download:**
 - **China (recommended in mainland China — jsDelivr mirror):**
-  https://cdn.jsdelivr.net/gh/AugeasTechnologies/stovyn-hejia@main/app/StovynBench-1.4.7.apk
-- APK (GitHub): [`app/StovynBench-1.4.7.apk`](app/StovynBench-1.4.7.apk)
-- ZIP (use this if your browser blocks the .apk): [`app/StovynBench-1.4.7.zip`](app/StovynBench-1.4.7.zip) — unzip to get the .apk
-- Or the release page: https://github.com/AugeasTechnologies/stovyn-ota/releases/tag/bench-v1.4.7
+  https://cdn.jsdelivr.net/gh/AugeasTechnologies/stovyn-hejia@main/app/StovynBench-1.4.8.apk
+- APK (GitHub): [`app/StovynBench-1.4.8.apk`](app/StovynBench-1.4.8.apk)
+- ZIP (use this if your browser blocks the .apk): [`app/StovynBench-1.4.8.zip`](app/StovynBench-1.4.8.zip) — unzip to get the .apk
+- Or the release page: https://github.com/AugeasTechnologies/stovyn-ota/releases/tag/bench-v1.4.8
 
 Most browsers flag a direct .apk as unsafe ("can't be downloaded securely" / "this file may
 harm your device") — that is normal for any APK; choose **Keep** / **Download anyway**. If your
